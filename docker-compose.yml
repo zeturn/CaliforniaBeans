@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  california-beans:
+    build: .
+    ports:
+      - "8080:8080"
