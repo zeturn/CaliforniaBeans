@@ -20,6 +20,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - 'v*'
 
 
 permissions:
@@ -38,6 +40,11 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             IMAGE="${{ inputs.image }}"
             GHCR_IMAGE="${{ inputs.ghcr_image }}"
+          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            REPO="${GITHUB_REPOSITORY,,}"
+            TAG="${GITHUB_REF#refs/tags/}"
+            IMAGE="${{ secrets.BEANCS_REGISTRY_HOST }}/${REPO}:${TAG}"
+            GHCR_IMAGE="ghcr.io/${REPO}:${TAG}"
           else
             REPO="${GITHUB_REPOSITORY,,}"
             IMAGE="${{ secrets.BEANCS_REGISTRY_HOST }}/${REPO}:beancs-${GITHUB_SHA::12}"
@@ -74,7 +81,7 @@ jobs:
       - name: Notify BeanCS
         if: always()
         env:
-          BEANCS_PROJECT: californiabeans18
+          BEANCS_PROJECT: californiabeans21
           BEANCS_WEBHOOK_URL: ${{ secrets.BEANCS_WEBHOOK_URL }}
           BEANCS_WEBHOOK_SECRET: ${{ secrets.BEANCS_WEBHOOK_SECRET }}
           BEANCS_STATUS: ${{ job.status }}
