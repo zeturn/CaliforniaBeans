@@ -81,7 +81,7 @@ jobs:
       - name: Notify BeanCS
         if: always()
         env:
-          BEANCS_PROJECT: californiabeans21
+          BEANCS_PROJECT: californiabeans2
           BEANCS_WEBHOOK_URL: ${{ secrets.BEANCS_WEBHOOK_URL }}
           BEANCS_WEBHOOK_SECRET: ${{ secrets.BEANCS_WEBHOOK_SECRET }}
           BEANCS_STATUS: ${{ job.status }}
