@@ -1,0 +1,57 @@
+apiVersion: beancs.io/v1alpha1
+kind: Application
+metadata:
+  name: california-beans
+  displayName: California Beans
+spec:
+  type: monorepo
+  repo:
+    provider: github
+    name: zeturn/CaliforniaBeans
+    branch: master
+  namespace:
+    strategy: dedicated
+    name: app-california-beans
+  autoDeploy:
+    enabled: true
+    mode: affected-components
+  dependencies:
+    - name: mysql
+      type: mysql
+      deployMethod: helm
+      shared: false
+      config:
+        database: app
+        username: app
+        persistence:
+          enabled: false
+          size: 1Gi
+      credential:
+        name: default
+        config:
+          database: app
+          username: app
+  components:
+    - name: web
+      kind: service
+      projectName: california-beans
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - name: http
+          port: 8080
+          protocol: http
+          exposure: public
+      healthCheck:
+        type: http
+        path: /
+        port: http
+      envFromDependencies:
+        - dependency: mysql
+          credential: default
+          preset: mysql_default
+      watchPaths:
+        - app.py
+        - Dockerfile
+        - requirements.txt
