@@ -16,21 +16,9 @@ spec:
     enabled: true
     mode: affected-components
   dependencies:
-    - name: mysql
+    - name: mysql268
       type: mysql
-      deployMethod: helm
-      shared: false
-      config:
-        database: app
-        username: app
-        persistence:
-          enabled: false
-          size: 1Gi
-      credential:
-        name: default
-        config:
-          database: app
-          username: app
+      existingDependencyID: 34
   components:
     - name: web
       kind: service
@@ -45,11 +33,13 @@ spec:
           exposure: public
       healthCheck:
         type: http
-        path: /
+        path: /health
         port: http
       envFromDependencies:
-        - dependency: mysql
-          credential: default
+        - dependency: mysql268
+          dependencyID: 34
+          credential: zet
+          credentialID: 45
           preset: mysql_default
       watchPaths:
         - app.py
