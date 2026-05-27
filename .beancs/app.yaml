@@ -10,7 +10,7 @@ spec:
     name: zeturn/CaliforniaBeans
     branch: master
   namespace:
-    strategy: dedicated
+    strategy: shared
     name: app-california-beans
   autoDeploy:
     enabled: true
