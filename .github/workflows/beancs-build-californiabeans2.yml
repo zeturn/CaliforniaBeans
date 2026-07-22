@@ -35,7 +35,7 @@ jobs:
       BEANCS_IMAGE_BASE: registry.beancs.hollowdata.com/hollowdata/californiabeans
       BEANCS_GHCR_IMAGE_BASE: ghcr.io/zeturn/californiabeans
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Resolve image
         id: meta
         shell: bash
